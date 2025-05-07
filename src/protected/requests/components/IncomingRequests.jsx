@@ -9,7 +9,7 @@ import { RiArrowDropDownLine, RiArrowDropUpLine } from 'react-icons/ri';
 import { TbBellRinging2Filled } from 'react-icons/tb';
 import { FaCommentDots } from 'react-icons/fa';
 import RemarksComponentContainer from './RemarksComponentContainer';
-import IncomingRequestUpdate from './incomingRequestUpdate';
+import IncomingRequestUpdate from './IncomingRequestUpdate';
 import NewDispatch from '../../dispatches/components/forms/NewDispatch';
 
 const IncomingRequests = () => {
