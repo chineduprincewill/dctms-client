@@ -4,10 +4,14 @@ import { fetchActiveStates } from '../apis/settingsActions';
 
 const StateOptions = ({ setState_id, state_id, state_name }) => {
 
-    const { token } = useContext(AppContext);
+    const { token, logout } = useContext(AppContext);
     const [states, setStates] = useState();
     const [error, setError] = useState();
     const [fetching, setFetching] = useState(false);
+
+    if(states?.status === "Token is Expired"){
+        logout();
+    }
 
     useEffect(() => {
         fetchActiveStates(token, setStates, setError, setFetching)

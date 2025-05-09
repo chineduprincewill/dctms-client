@@ -3,20 +3,26 @@ import PageTitle from '../../common/PageTitle'
 import { PiWarehouse } from 'react-icons/pi'
 import { AppContext } from '../../context/AppContext'
 import { formatDate } from '../../apis/functions'
-import { AiOutlineEdit, AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineEdit, AiOutlineLoading3Quarters, AiOutlineSearch } from 'react-icons/ai'
 import { MdOutlineSend } from 'react-icons/md'
 import LoadingBars from '../../common/LoadingBars'
 import RecordsTable from '../../common/RecordsTable'
-import { fetchAllInventory } from '../../apis/InventoriesActions'
+import { fetchAllInventory, filterInventory } from '../../apis/InventoriesActions'
 import NewInventory from './components/forms/NewInventory'
 import { BsClockHistory } from 'react-icons/bs'
 import DispatchHistoryDialog from '../dispatches/components/DispatchHistoryDialog'
+import { fetchActiveStates } from '../../apis/settingsActions'
+import StateOptions from '../../common/StateOptions'
+import LgaOptions from '../../common/LgaOptions'
+import { CiFilter } from 'react-icons/ci'
+import { BiReset } from 'react-icons/bi'
 
 const Warehouse = () => {
 
     const { token, user, record, logout } = useContext(AppContext);
     const [addInventory, setAddInventory] = useState(false);
     const [inventories, setInventories] = useState();
+    const [filteredInventories, setFilteredInventories] = useState();
     const [error, setError] = useState();
     const [fetching, setFetching] = useState(false);
     const [tool_id, setTool_id] = useState();
@@ -24,6 +30,12 @@ const Warehouse = () => {
     const [created_at, setCreated_at] = useState();
     const [historyDialog, setHistoryDialog] = useState(false);
     const [itemname, setItemname] = useState();
+    const [groupname, setGroupname] = useState();
+    const [states, setStates] = useState();
+    const [getting, setGetting] = useState(false);
+    const [state_id, setState_id] = useState();
+    const [lga_id, setLga_id] = useState();
+    const [filtering, setFiltering] = useState(false);
 
     const columns = [
         {
@@ -149,9 +161,26 @@ const Warehouse = () => {
         setCreated_at(created_at);
         setItemname(itemname)
         setHistoryDialog(true);
-
-
     }
+
+    const handleFilter = (e) => {
+        e.preventDefault();
+
+        if(!state_id){
+            alert('State must be selected!')
+        }
+        else{
+            const data = {
+                location_type: groupname,
+                location_id: groupname === 'state' ? state_id : lga_id
+            }
+            filterInventory(token, data, setFilteredInventories, setError, setFetching)
+        }
+    }
+
+    useEffect(() => {
+        fetchActiveStates(token, setStates, setError, setGetting)
+    }, [])
 
     useEffect(() => {
         fetchAllInventory(token, setInventories, setError, setFetching)
@@ -172,12 +201,51 @@ const Warehouse = () => {
                     </button>
                 }
             </div>
+            {
+                user && JSON.parse(user)?.groupname === 'APIN' &&
+                <form onSubmit={handleFilter} className='w-full grid md:flex items-center gap-4 mt-4 pb-4 border-b border-gray-300 dark:border-gray-700'>
+                    <select
+                        className='w-full md:max-w-max rounded-md p-2 border border-gray-500 bg-transparent'
+                        onChange={(e) => setGroupname(e.target.value)}
+                        required
+                    >
+                        <option value=''>select group</option>
+                        <option value='state'>state</option>
+                        <option value='lga'>lga</option>
+                    </select>
+                    <div className='w-full md:w-[200px]'>
+                        <StateOptions setState_id={setState_id} />
+                    </div>
+                    <div className='w-full md:w-[200px]'>
+                        <LgaOptions setLga_id={setLga_id} state_id={state_id} />
+                    </div>
+                    <button
+                        className={`w-full md:max-w-max flex justify-center p-2 rounded-md bg-[#a8d13a] hover:bg-[#85a62a] text-black`}
+                    >
+                        {
+                            fetching ? 
+                                <AiOutlineLoading3Quarters size={24} className='animate-spin' /> : 
+                                <CiFilter size={22} />
+                            }
+                    </button>
+
+                    <div className='rounded-full max-w-max p-1 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer'>
+                        <BiReset 
+                            size={22} 
+                            onClick={() => window.location.reload()}
+                            title='Reset filter'
+                        />
+                    </div>
+                </form>
+            }
             <div className='w-full mt-8 mb-4'>
             {
                 fetching ? <LoadingBars /> :
-                inventories && inventories.length > 0 ? 
-                    <RecordsTable columns={columns} data={inventories} /> :
-                    <div className='w-full text-red-500 capitalize p-2 rounded-md bg-red-100 dark:bg-gray-700'>No inventory record found!</div>
+                    filteredInventories && filteredInventories.length > 0 ?
+                        <RecordsTable columns={columns} data={filteredInventories} /> :
+                            inventories && inventories.length > 0 ?
+                                <RecordsTable columns={columns} data={inventories} /> :
+                                <div className='w-full text-red-500 capitalize p-2 rounded-md bg-red-100 dark:bg-gray-700'>No inventory record found!</div>
             }
             {
                 addInventory && <NewInventory setAddInventory={setAddInventory} />

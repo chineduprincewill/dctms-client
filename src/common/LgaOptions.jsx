@@ -4,10 +4,14 @@ import { fetchActiveStateLgas } from '../apis/settingsActions';
 
 const LgaOptions = ({ setLga_id, state_id, lga_id, lga_name }) => {
 
-    const { token } = useContext(AppContext);
+    const { token, logout } = useContext(AppContext);
     const [lgas, setLgas] = useState();
     const [error, setError] = useState();
     const [fetching, setFetching] = useState(false);
+
+    if(lgas?.status === "Token is Expired"){
+        logout();
+    }
 
     console.log(lga_id);
 
