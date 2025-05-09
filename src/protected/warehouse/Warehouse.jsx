@@ -209,9 +209,9 @@ const Warehouse = () => {
                         onChange={(e) => setGroupname(e.target.value)}
                         required
                     >
-                        <option value=''>select group</option>
-                        <option value='state'>state</option>
-                        <option value='lga'>lga</option>
+                        <option className='dark:bg-gray-800 dark:text-white' value=''>select group</option>
+                        <option className='dark:bg-gray-800 dark:text-white' value='state'>state</option>
+                        <option className='dark:bg-gray-800 dark:text-white' value='lga'>lga</option>
                     </select>
                     <div className='w-full md:w-[200px]'>
                         <StateOptions setState_id={setState_id} />
