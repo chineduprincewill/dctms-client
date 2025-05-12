@@ -35,7 +35,9 @@ const IncomingRequests = () => {
             sortable: true,
             cell: (row) => (
                 <div className='grid py-2 space-y-1'>
-                    <span className='text-sm'>{row?.from} {row?.source_type}</span>
+                    <span className='text-sm'>
+                        {row?.source_type === 'facility' ? row?.fromfacility+', '+row?.from : row?.from+' '+row?.source_type}
+                    </span>
                     <span className='text-xs'>{formatDateAndTime(row?.created_at)}</span>
                 </div>
             )

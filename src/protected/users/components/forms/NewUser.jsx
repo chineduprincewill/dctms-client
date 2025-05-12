@@ -77,6 +77,7 @@ const NewUser = ({ setCreateUserModal }) => {
                                     <option className='dark:bg-gray-800 dark:text-white' value="APIN">APIN</option>
                                     <option className='dark:bg-gray-800 dark:text-white' value="state">state</option>
                                     <option className='dark:bg-gray-800 dark:text-white' value="lga">lga</option>
+                                    <option className='dark:bg-gray-800 dark:text-white' value="facility">facility</option>
                                 </select>
                                 <select 
                                     className='w-full rounded-md p-2 border border-gray-500 bg-transparent'

@@ -25,7 +25,7 @@ const DispatchHistoryDialog = ({ tool_id, batch_no, created_at, itemname, setHis
                         { row?.source_type === 'APIN' && 'APIN HQ Warehouse' }
                         { row?.source_type === 'state' && row?.source_state+' '+row?.source_type }
                         { row?.source_type === 'lga' && row?.source_lga+' '+row?.source_type }
-                        { row?.source_type === 'facility' && row?.source_facility+' '+row?.source_type }
+                        { row?.source_type === 'facility' && row?.source_facility+', '+row?.source_lga }
                         </span>
                         <span className='text-xs'>{formatDate(row?.dispatch_date)}</span>
                     </div>
@@ -41,7 +41,7 @@ const DispatchHistoryDialog = ({ tool_id, batch_no, created_at, itemname, setHis
                         <span className='text-sm'>
                         { row?.destination_type === 'state' && row?.destination_state+' '+row?.destination_type }
                         { row?.destination_type === 'lga' && row?.destination_lga+' '+row?.destination_type }
-                        { row?.destination_type === 'facility' && row?.destination_facility+' '+row?.destination_type }
+                        { row?.destination_type === 'facility' && row?.destination_facility+', '+row?.destination_lga }
                         </span>
                         <span className='text-xs'>{formatDate(row?.dispatch_date)}</span>
                     </div>

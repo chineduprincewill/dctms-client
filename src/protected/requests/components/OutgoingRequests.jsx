@@ -34,6 +34,9 @@ const OutgoingRequests = () => {
                         row?.destination_type === 'state' && row?.tostate+' '+row?.destination_type
                     }
                     {
+                        row?.destination_type === 'facility' && row?.tofacility+' '+row?.destination_type+', '+row?.tolga
+                    }
+                    {
                         row?.destination_type === 'lga' && row?.tolga+' '+row?.destination_type
                     }
                     {

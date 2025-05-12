@@ -218,16 +218,24 @@ const NewRequest = ({ setCreateRequest, setShowoutgoing }) => {
                                                 <option className='dark:bg-gray-800 dark:text-white' value="LGA">LGA</option>
                                             </Fragment>
                                         }
+                                        {
+                                            user && JSON.parse(user)?.groupname === 'facility' &&
+                                            <Fragment>
+                                                <option className='dark:bg-gray-800 dark:text-white' value="State">State</option>
+                                                <option className='dark:bg-gray-800 dark:text-white' value="LGA">LGA</option>
+                                                <option className='dark:bg-gray-800 dark:text-white' value="Facility">Facility</option>
+                                            </Fragment>
+                                        }
                                         </select>
                                     {
                                         (destination_type && destination_type === 'LGA') &&
                                             <LgaOptions setLga_id={setDestination_id} state_id={user && JSON.parse(user)?.state_id} />
                                     }
                                         <button
-                                            className={`w-full md:max-w-max flex justify-center items-center py-2 px-6 rounded-md bg-[#a8d13a] hover:bg-[#85a62a] text-black gap-1 ${sending && 'animate-pulse'}`}
-                                            onClick={() => !sending && submitRequest()}
+                                            className={`w-full md:max-w-max flex justify-center items-center py-2 px-6 rounded-md bg-[#a8d13a] hover:bg-[#85a62a] text-black gap-1 ${submitting && 'animate-pulse'}`}
+                                            onClick={() => !submitting && submitRequest()}
                                         >
-                                            <TbSend size={14} /><span>{sending ? 'Sending...' : 'Send Request'}</span>
+                                            <TbSend size={14} /><span>{submitting ? 'Sending...' : 'Send Request'}</span>
                                         </button>
                                     </div>
                             }

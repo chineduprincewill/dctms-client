@@ -25,7 +25,7 @@ const OutgoingDispatches = ({ dispatches }) => {
                     <span className='text-sm'>
                     { row?.destination_type === 'state' && row?.destination_state+' '+row?.destination_type }
                     { row?.destination_type === 'lga' && row?.destination_lga+' '+row?.destination_type }
-                    { row?.destination_type === 'facility' && row?.destination_facility+' '+row?.destination_type }
+                    { row?.destination_type === 'facility' && row?.destination_facility+', '+row?.destination_lga }
                     </span>
                     <span className='text-xs'>{formatDate(row?.dispatch_date)}</span>
                 </div>

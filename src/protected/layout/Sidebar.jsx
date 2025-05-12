@@ -18,10 +18,10 @@ const Sidebar = ({ toggleSidebar, navOpen }) => {
     return (
         <Fragment>
             <div 
-                className={navOpen ? 'fixed inset-0 z-50 mt-0 bg-black bg-opacity-50 transition-opacity md:hidden' : ''}
+                className={navOpen ? 'fixed inset-0 z-40 mt-0 bg-black bg-opacity-50 transition-opacity md:hidden' : ''}
                 onClick={toggleSidebar}
             ></div>
-            <div className={`absolute left-0 top-0 z-50 ${navOpen ? 'block w-[230px]' : 'hidden'} md:flex flex-col md:w-[230px] h-screen overflow-y-hidden duration-300 ease-linear bg-white dark:bg-[#19212c]`}>
+            <div className={`absolute left-0 top-0 z-40 ${navOpen ? 'block w-[230px]' : 'hidden'} md:flex flex-col md:w-[230px] h-screen overflow-y-hidden duration-300 ease-linear bg-white dark:bg-[#19212c]`}>
                 <div className='hidden md:flex md:justify-center md:items-center md:w-full bg-[#005072] px-6 md:h-[50px] space-x-2 text-white'>  
                 </div>
                 <div className='flex justify-end mt-2 md:hidden px-6'>

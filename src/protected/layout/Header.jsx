@@ -5,13 +5,16 @@ import { AppContext } from '../../context/AppContext';
 import ThemeToggle from '../../common/ThemeToggle';
 import { TbLayoutDashboardFilled, TbVirusSearch } from 'react-icons/tb';
 import { HiBell, HiUser } from 'react-icons/hi';
+import { CiSettings } from 'react-icons/ci';
+import PasswordReset from '../settings/components/forms/PasswordReset';
 
 const Header = ({ toggleSidebar }) => {
 
     const { user } = useContext(AppContext);
+    const [resetPassword, setResetPassword] = useState(false);
 
     return (
-        <header className='sticky w-full top-0 z-40 bg-[#005072] h-[50px] py-2'>
+        <header className='sticky w-full top-0 z-30 bg-[#005072] h-[50px] py-2'>
             <div className='flex flex-grow items-center justify-between p-2 md:px-3 2xl:px-11'>
                 <div className='flex items-center space-x-3'>   
                     <RxHamburgerMenu size={25} className='text-gray-100 cursor-pointer' onClick={toggleSidebar} />
@@ -33,12 +36,22 @@ const Header = ({ toggleSidebar }) => {
                         <div className='h-6 border-x border-gray-400'></div>
                         <img src='/assets/dctms-logo.png' alt='brand logo' width="25px" className='block md:hidden' />
                         <div className='h-6 border-x border-gray-400 block md:hidden'></div>
+                        <CiSettings 
+                            size={20}  
+                            className='cursor-pointer hover:text-gray-400'
+                            onClick={() => setResetPassword(true)}
+                            title='Reset user password'
+                        />
+                        <div className='h-6 border-x border-gray-400'></div>
                         <HiBell size={20} />
                         <div className='h-6 border-x border-gray-400'></div>
                         <ThemeToggle />
                     </div>
                 </div>
             </div>
+        {
+            resetPassword && <PasswordReset setResetPassword={setResetPassword} />
+        }
         </header>
     )
 }
