@@ -4,6 +4,7 @@ import { dispatchRequest } from '../../../../apis/dispatchActions';
 import ButtonLoader from '../../../../common/ButtonLoader';
 import { AppContext } from '../../../../context/AppContext';
 import { fetchItemPacktypes } from '../../../../apis/settingsActions';
+import { fetchItemBatches } from '../../../../apis/InventoriesActions';
 
 const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
 
@@ -14,11 +15,15 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
     const [packtype, setPacktype] = useState();
     const [unit_quantity, setUnit_quantity] = useState();
     const [dispatch_date, setDispatch_date] = useState();
+    const [inventory_id, setInventory_id] = useState();
     const [arrayToDispatch, setArrayToDispatch] = useState(dispatchArray);
     const [dispatching, setDispatching] = useState(false);
     const [success, setSuccess] = useState();
     const [packtypes, setPacktypes] = useState();
     const [getting, setGetting] = useState(false);
+    const [tool_id, setTool_id] = useState();
+    const [fetching, setFetching] = useState(false);
+    const [batches, setBatches] = useState();
 
     console.log(arrayToDispatch);
 
@@ -27,6 +32,7 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
         setQuantity(itemobj?.quantity)
         setPacktype(itemobj?.packtype)
         setUnit_quantity(itemobj?.unit_quantity)
+        setTool_id(itemobj?.tool_id)
         console.log(itemobj)
     }
 
@@ -49,7 +55,7 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
         }
         else{
             const data = {
-                id, quantity, packtype, unit_quantity, dispatch_date
+                id, quantity, packtype, unit_quantity, dispatch_date, inventory_id
             }
             //console.log(data);
             dispatchRequest(token, data, setSuccess, setError, setDispatching)
@@ -81,13 +87,17 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
         //getItemId()
     }, [editId])
 
+    useEffect(() => {
+        fetchItemBatches(token, { tool_id : parseInt(tool_id) }, setBatches, setError, setFetching)
+    }, [editId, tool_id])
+
 
     return (
         <div>
             <div className='fixed inset-0 z-50 bg-black bg-opacity-70 transition-opacity'></div>
             <div className="fixed inset-0 z-50 overflow-y-auto">
                 <div className="flex mt-16 md:mt-0 md:min-h-full items-end justify-center p-4 sm:items-center sm:p-0">
-                    <div className={`w-full md:w-[700px] bg-gray-100 dark:bg-gray-800 px-6 py-1 rounded-md`}>
+                    <div className={`w-full md:w-[70%] bg-gray-100 dark:bg-gray-800 px-6 py-1 rounded-md`}>
                         <div className='flex justify-between items-center border-b border-gray-200 dark:border-gray-700 py-2'>
                             <span className='capitalize font-extralight text-lg'>
                                 dispatch items
@@ -105,6 +115,7 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
                             }
                             <div className='w-full my-4 space-y-4'>
                             {
+                                arrayToDispatch.length > 0 ?
                                 arrayToDispatch.map(item => (
                                     <div key={item?.request_id} className='w-full flex justify-between items-center py-1 border-b border-gray-200 dark:border-gray-700'>
                                         <div className='grid md:flex md:items-center gap-2'>
@@ -136,6 +147,20 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
                                                             ))
                                                         }
                                                             <option className='dark:bg-gray-800 dark:text-white' value="unit">unit</option>
+                                                        </select>
+                                                        <select 
+                                                            className='md:w-[150px] p-1 bg-transparent rounded-md border border-gray-200 dark:border-gray-700'
+                                                            onChange={(e) => setInventory_id(e.target.value)}
+                                                            required
+                                                        >
+                                                            <option className='dark:bg-gray-800 dark:text-white' value="">{fetching ? 'fetching...' : 'select batch'}</option>
+                                                        {
+                                                            batches && batches.length > 0 && batches.map(btch => (
+                                                                <option key={btch?.inventory_id} className='dark:bg-gray-800 dark:text-white' value={btch?.inventory_id}>
+                                                                { btch?.batch_no+' - '+(btch?.unit_quantity - btch?.dispatched) }
+                                                                </option>
+                                                            ))
+                                                        }
                                                         </select>
                                                     </div>:
                                                     <div className='flex gap-2 items-center'>
@@ -187,6 +212,8 @@ const NewDispatch = ({ setCreateDispatch, dispatchArray }) => {
                                             }
                                     </div>
                                 ))
+                                :
+                                <div className='w-full rounded-md bg-red-200 text-red-600 p-2'>No item left to dispatch!</div>
                             }
                             </div>
                             

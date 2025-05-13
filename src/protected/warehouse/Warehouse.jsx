@@ -16,6 +16,7 @@ import StateOptions from '../../common/StateOptions'
 import LgaOptions from '../../common/LgaOptions'
 import { CiFilter } from 'react-icons/ci'
 import { BiReset } from 'react-icons/bi'
+import FacilityOptions from '../../common/FacilityOptions'
 
 const Warehouse = () => {
 
@@ -35,6 +36,7 @@ const Warehouse = () => {
     const [getting, setGetting] = useState(false);
     const [state_id, setState_id] = useState();
     const [lga_id, setLga_id] = useState();
+    const [facility_id, setFacility_id] = useState();
     const [filtering, setFiltering] = useState(false);
 
     const columns = [
@@ -172,7 +174,8 @@ const Warehouse = () => {
         else{
             const data = {
                 location_type: groupname,
-                location_id: groupname === 'state' ? state_id : lga_id
+                location_id: groupname === 'state' ? state_id : 
+                    (groupname === 'lga' ? lga_id : facility_id)
             }
             filterInventory(token, data, setFilteredInventories, setError, setFetching)
         }
@@ -212,12 +215,16 @@ const Warehouse = () => {
                         <option className='dark:bg-gray-800 dark:text-white' value=''>select group</option>
                         <option className='dark:bg-gray-800 dark:text-white' value='state'>state</option>
                         <option className='dark:bg-gray-800 dark:text-white' value='lga'>lga</option>
+                        <option className='dark:bg-gray-800 dark:text-white' value='facility'>facility</option>
                     </select>
                     <div className='w-full md:w-[200px]'>
                         <StateOptions setState_id={setState_id} />
                     </div>
                     <div className='w-full md:w-[200px]'>
                         <LgaOptions setLga_id={setLga_id} state_id={state_id} />
+                    </div>
+                    <div className='w-full md:w-[200px]'>
+                        <FacilityOptions setFacility_id={setFacility_id} lga_id={lga_id} facility_id={facility_id} />
                     </div>
                     <button
                         className={`w-full md:max-w-max flex justify-center p-2 rounded-md bg-[#a8d13a] hover:bg-[#85a62a] text-black`}
